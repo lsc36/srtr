@@ -94,6 +94,11 @@ class HistoryHandler(BaseHandler):
             history=reversed(list(zip(range(1, history.count() + 1), history.history))))
 
 
+class RulesHandler(BaseHandler):
+    def get(self):
+        self.render('rules.html')
+
+
 def main():
     parse_command_line()
     app = tornado.web.Application(
@@ -102,6 +107,7 @@ def main():
             (r"/next", NextWordHandler),
             (r"/update", UpdateHandler),
             (r"/history", HistoryHandler),
+            (r"/rules", RulesHandler),
             ],
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
         static_path=os.path.join(os.path.dirname(__file__), "static"),
