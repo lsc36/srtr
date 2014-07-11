@@ -31,6 +31,8 @@ class SrtrHistory(object):
     def push(self, new_word):
         if self.last()[-1] != new_word[0]:
             return False
+        if new_word in self.history:
+            return False
         self.history.append(new_word)
         for future in self.waiters:
             future.set_result(dict(position=self.count(), last_word=self.last()))
@@ -65,7 +67,7 @@ class MainHandler(BaseHandler):
 class NextWordHandler(BaseHandler):
     def get(self):
         word = self.get_argument('w')
-        self.write(json.dumps(history.push(word)))
+        self.write(json.dumps(history.push(word.strip())))
 
 
 class UpdateHandler(BaseHandler):
