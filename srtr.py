@@ -89,9 +89,7 @@ class NextWordHandler(BaseHandler):
 class UpdateHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        position = self.get_argument('pos', None)
-        if position:
-            position = int(position)
+        position = int(self.get_argument('pos', None))
         self.future = history.wait(position=position)
         result = yield self.future
         if self.request.connection.stream.closed():
