@@ -29,7 +29,7 @@ var updater = {
 
 	poll: function() {
 		var args = {};
-		if (updater.position) args.pos = updater.position;
+		args.pos = updater.position;
 		$.getJSON('/update', $.param(args), updater.onSuccess)
 			.fail(updater.onError);
 	},
