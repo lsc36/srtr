@@ -44,9 +44,9 @@ class SrtrHistory(object):
         self.update()
         return True
 
-    def wait(self, position=None):
+    def wait(self, position):
         future = Future()
-        if position and position != self.count():
+        if position != self.count():
             future.set_result(dict(position=self.count(), last_word=self.last()))
         else:
             self.waiters.add(future)
