@@ -95,7 +95,6 @@ class UpdateHandler(BaseHandler):
         result = yield self.future
         if self.request.connection.stream.closed():
             return
-        result['last_word'] = tornado.escape.xhtml_escape(result['last_word'])
         self.write(result)
 
     def on_connection_close(self):

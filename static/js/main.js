@@ -50,7 +50,7 @@ var updater = {
 		updater.position = response.position;
 		var last_word = response.last_word;
 		$('#last-word').parent().animate({opacity: 0}, function() {
-			$('#last-word').html(last_word);
+			$('#last-word').text(last_word);
 			$('#position').html('#' + updater.position);
 			$('#last-word').parent().animate({opacity: 1});
 		});
