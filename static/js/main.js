@@ -49,8 +49,11 @@ var updater = {
 	update: function(response) {
 		updater.position = response.position;
 		var last_word = response.last_word;
-		$('#last-word').html(last_word);
-		$('#position').html('#' + updater.position);
+		$('#last-word').parent().animate({opacity: 0}, function() {
+			$('#last-word').html(last_word);
+			$('#position').html('#' + updater.position);
+			$('#last-word').parent().animate({opacity: 1});
+		});
 		$('#next-word').attr('placeholder', last_word[last_word.length - 1] + '...')
 	}
 };
