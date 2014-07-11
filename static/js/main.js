@@ -25,7 +25,7 @@ var nextword = function(word, callback) {
 
 var updater = {
 	errorSleepTime: 500,
-	position: null,
+	position: 0,
 
 	poll: function() {
 		var args = {};
