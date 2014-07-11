@@ -16,6 +16,7 @@ from tornado.options import define, options, parse_command_line
 define("port", default=8888, help="run on the given port", type=int)
 define("debug", default=False, help="run in debug mode")
 define("initial_word", default='耍寶', help="initial word")
+define("reset", default=False, help="reset history (not reading previous save)")
 
 
 class SrtrHistory(object):
@@ -126,7 +127,16 @@ class LoadHandler(BaseHandler):
 
 def main():
     parse_command_line()
-    history.load()
+
+    if options.reset:
+        logging.info("History reset")
+    else:
+        try:
+            history.load()
+            logging.info("History loaded")
+        except:
+            logging.warning("Error loading history, starting from initial word")
+
     app = tornado.web.Application(
         [
             (r"/", MainHandler),
@@ -149,6 +159,7 @@ def main():
         pass
     finally:
         history.save()
+        logging.info("History saved")
 
 
 if __name__ == "__main__":
