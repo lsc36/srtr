@@ -28,6 +28,11 @@ class SrtrHistory(object):
     def count(self):
         return len(self.history)
 
+    def update(self):
+        for future in self.waiters:
+            future.set_result(dict(position=self.count(), last_word=self.last()))
+        self.waiters.clear()
+
     def push(self, new_word):
         if len(new_word) > 32:
             return False
@@ -36,9 +41,7 @@ class SrtrHistory(object):
         if new_word in self.history:
             return False
         self.history.append(new_word)
-        for future in self.waiters:
-            future.set_result(dict(position=self.count(), last_word=self.last()))
-        self.waiters.clear()
+        self.update()
         return True
 
     def wait(self, position=None):
@@ -52,6 +55,17 @@ class SrtrHistory(object):
     def cancel_wait(self, future):
         self.waiters.remove(future)
         future.set_result((0, ''))
+
+    def save(self):
+        f = open('history.json', 'w')
+        f.write(json.dumps(self.history))
+        f.close()
+
+    def load(self):
+        f = open('history.json', 'r')
+        self.history = json.loads(f.read())
+        f.close()
+        self.update()
 
 history = SrtrHistory(options.initial_word)
 
@@ -99,6 +113,18 @@ class RulesHandler(BaseHandler):
         self.render('rules.html')
 
 
+class SaveHandler(BaseHandler):
+    def get(self):
+        history.save()
+        self.write('true')
+
+
+class LoadHandler(BaseHandler):
+    def get(self):
+        history.load()
+        self.write('true')
+
+
 def main():
     parse_command_line()
     app = tornado.web.Application(
@@ -108,6 +134,8 @@ def main():
             (r"/update", UpdateHandler),
             (r"/history", HistoryHandler),
             (r"/rules", RulesHandler),
+            (r"/save", SaveHandler),
+            (r"/load", LoadHandler),
             ],
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
         static_path=os.path.join(os.path.dirname(__file__), "static"),
