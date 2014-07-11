@@ -33,14 +33,14 @@ class SrtrHistory(object):
             return False
         self.history.append(new_word)
         for future in self.waiters:
-            future.set_result((self.count(), self.last()))
+            future.set_result(dict(position=self.count(), last_word=self.last()))
         self.waiters.clear()
         return True
 
     def wait(self, position=None):
         future = Future()
         if position and position != self.count():
-            future.set_result((self.count(), self.last()))
+            future.set_result(dict(position=self.count(), last_word=self.last()))
         else:
             self.waiters.add(future)
         return future
@@ -58,7 +58,8 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        self.write(json.dumps((history.count(), history.last())))
+        self.render('index.html',
+            position=history.count(), last_word=history.last())
 
 
 class NextWordHandler(BaseHandler):
@@ -75,7 +76,7 @@ class UpdateHandler(BaseHandler):
         result = yield self.future
         if self.request.connection.stream.closed():
             return
-        self.write(json.dumps(result))
+        self.write(result)
 
     def on_connection_close(self):
         history.cancel_wait(self.future)
