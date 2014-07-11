@@ -143,7 +143,12 @@ def main():
         debug=options.debug,
         )
     app.listen(options.port)
-    tornado.ioloop.IOLoop.instance().start()
+    try:
+        tornado.ioloop.IOLoop.instance().start()
+    except:
+        pass
+    finally:
+        history.save()
 
 
 if __name__ == "__main__":
