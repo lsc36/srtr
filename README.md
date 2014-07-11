@@ -1,0 +1,4 @@
+srtr
+====
+
+shiritori game site
