@@ -29,6 +29,8 @@ class SrtrHistory(object):
         return len(self.history)
 
     def push(self, new_word):
+        if len(new_word) > 32:
+            return False
         if self.last()[-1] != new_word[0]:
             return False
         if new_word in self.history:
