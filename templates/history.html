@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-striped" id="history">
+	{% for entry in history %}
+	<tr>
+		<td class="col-md-1">{{ entry[0] }}</td>
+		<td>{{ entry[1] }}</td>
+	</tr>
+	{% end %}
+</table>
+<a href="/">back</a>
+{% end %}

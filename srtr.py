@@ -84,6 +84,12 @@ class UpdateHandler(BaseHandler):
         history.cancel_wait(self.future)
 
 
+class HistoryHandler(BaseHandler):
+    def get(self):
+        self.render('history.html',
+            history=reversed(list(zip(range(1, history.count() + 1), history.history))))
+
+
 def main():
     parse_command_line()
     app = tornado.web.Application(
@@ -91,6 +97,7 @@ def main():
             (r"/", MainHandler),
             (r"/next", NextWordHandler),
             (r"/update", UpdateHandler),
+            (r"/history", HistoryHandler),
             ],
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
         static_path=os.path.join(os.path.dirname(__file__), "static"),

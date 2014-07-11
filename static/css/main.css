@@ -5,3 +5,7 @@ body {
 #wrapper {
 	display: inline-block;
 }
+
+#history {
+	min-width: 400px;
+}
