@@ -5,6 +5,7 @@ import tornado.auth
 import tornado.escape
 import tornado.ioloop
 import tornado.web
+import tornado.escape
 import os.path
 import json
 
@@ -94,6 +95,7 @@ class UpdateHandler(BaseHandler):
         result = yield self.future
         if self.request.connection.stream.closed():
             return
+        result['last_word'] = tornado.escape.xhtml_escape(result['last_word'])
         self.write(result)
 
     def on_connection_close(self):
@@ -125,6 +127,7 @@ class LoadHandler(BaseHandler):
 
 def main():
     parse_command_line()
+    history.load()
     app = tornado.web.Application(
         [
             (r"/", MainHandler),
