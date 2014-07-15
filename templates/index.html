@@ -2,12 +2,12 @@
 
 {% block content %}
 <h1>
-	<span id="last-word">{{ last_word }}</span>
-	<small id="position">#{{ position }}</small>
+	<span id="last-word">&nbsp;</span>
+	<small id="position"></small>
 </h1>
 <form class="form-inline" role="form">
 	<div class="form-group">
-		<input type="text" class="form-control" id="next-word" placeholder="{{ last_word[-1] }}...">
+		<input type="text" class="form-control" id="next-word" placeholder="">
 	</div>
 </form>
 <a href='/rules'>rules</a>
